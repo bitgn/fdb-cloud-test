@@ -1,4 +1,4 @@
-** About
+## About
 
 The purpose of this project is to make it easy to run various load
 tests on systems with FoundationDB in the cloud.
@@ -24,7 +24,7 @@ Initial plan is to have a setup with a fixed topology:
 Number and VM type for the node and load tester machines could be
 changed within the configuration.
 
-** Cleanup
+## Cleanup
 
 This project was started by Rinat Abdullin a while ago as a platform
 for experimenting with FoundationDB. As such it has accumulated some
@@ -32,3 +32,8 @@ layers and extensions that may be unnecessary.
 
 The project also uses old versions of FoundationDB and all the
 dependencies, so these will need to be updated.
+
+
+We also include all the dependencies in binary form in github. It was 
+worth it before the code was open source and repository size wasn't a 
+big concern. Things could be different now.
