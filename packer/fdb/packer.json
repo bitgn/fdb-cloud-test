@@ -10,23 +10,23 @@
             "access_key": "{{user `aws_access_key`}}",
             "secret_key": "{{user `aws_secret_key`}}",
             "region": "eu-central-1",
-            "source_ami": "ami-ccc021a3",
+            "source_ami": "ami-373717dc",
             "instance_type": "t2.small",
             "ssh_username": "admin",
             "ami_name": "bitgn-fdb",
             "force_deregister": true,
             
-            "ami_description": "Debian 8.4 with FDB installed",
+            "ami_description": "Debian 9.4 with FDB installed",
             "tags": {
                 "OS_Version" : "Debian",
-                "Release": "8.4",
+                "Release": "9.4",
                 "Component": "fdb"
             }
         },
         {
             "name": "test",
             "type": "docker",
-            "image": "debian:8.4",
+            "image": "debian:9.4",
             "discard": true
         }
     ],

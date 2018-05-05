@@ -19,9 +19,9 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get clean && apt-get update
-apt-get install -y -qq python
+apt-get install -y -qq python lsb
 
-dpkg -i foundationdb-clients_3.0.7-1_amd64.deb
+dpkg -i foundationdb-clients_5.1.7-1_amd64.deb
 # client tools are installed at this point
 
 
@@ -30,14 +30,7 @@ mv policy-rc.d /usr/sbin
 
 
 # to avoid install problem
-# https://yeupou.wordpress.com/2012/07/21/modifying-preinst-and-postinst-scripts-before-installing-a-package-with-dpkg/
-
-#dpkg-deb --extract foundationdb-server_3.0.7-1_amd64.deb server
-#dpkg-deb --control foundationdb-server_3.0.7-1_amd64.deb server/DEBIAN
-#rm server/DEBIAN/postinst
-#dpkg-deb --build server
-
-dpkg -i  foundationdb-server_3.0.7-1_amd64.deb
+dpkg -i foundationdb-server_5.1.7-1_amd64.deb
 
 /usr/lib/foundationdb/make_public.py
 
