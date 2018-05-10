@@ -1,5 +1,3 @@
-Status: unstable (update is in progress)
-
 # About
 
 The purpose of this project is to make it easy to run various load
@@ -215,3 +213,18 @@ variable "aws_tester_size" {
   description = "instance type for launching tester machines"
 }
 ```
+
+
+# Plans
+
+I plan to improve this repository a bit later by:
+
+1. Introducing a load tester tool (pre-installed to the tester image)
+   with common benchmarks.
+2. Adding a few scripts to visualize the results.
+3. Adding more Terraform configurations tuned for better performance.
+
+# Contact
+
+If you have any questions, please don't hesitate to get in touch by
+sending an email to rinat at abdullin.com.
