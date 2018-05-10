@@ -36,6 +36,12 @@
             "type": "docker",
             "image": "ubuntu:16.04",
             "discard": true
+        },
+        {
+            "name": "docker",
+            "type": "docker",
+            "image": "ubuntu:16.04",
+            "commit": true
         }
     ],
     "provisioners": [
