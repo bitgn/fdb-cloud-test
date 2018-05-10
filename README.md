@@ -12,12 +12,12 @@ We can achieve that by:
    specific configuration.
 
 The first step is handled by the [Packer](https://www.packer.io), the
-second - by the [Terraform](https://www.terraform.io)
+second - by the [Terraform](https://www.terraform.io).
 
-Initial plan is to have a setup with a fixed topology:
+We want to start with a fixed topology:
 
-- FoundationDB nodes in the same network
-- Load tester machines connected to the same network
+- foundationDB nodes in the same network, forming a cluster;
+- tester machines connected to the FDB.
 
 Number and VM type for the node and load tester machines could be
 changed within the configuration.
@@ -41,7 +41,7 @@ AWS credentials):
 $ export AWS_ACCESS_KEY=""
 $ export AWS_SECRET_KEY=""
 $ cd packer-fdb
-y$ packer build --only=aws packer.json
+$ packer build --only=aws packer.json
 ```
 
 Tester AMI can be created exactly like this but you enter
@@ -54,7 +54,7 @@ via:
 
 ```
 $ cd packer-fdb
-y$ packer build --only=docker packer.json
+$ packer build --only=docker packer.json
 ```
 
 # Deploying Clusters
