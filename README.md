@@ -1,6 +1,6 @@
 Status: unstable (update is in progress)
 
-## About
+# About
 
 The purpose of this project is to make it easy to run various load
 tests on systems with FoundationDB in the cloud.
@@ -20,13 +20,26 @@ Initial plan is to have a setup with a fixed topology:
 
 - FoundationDB nodes in the same network
 - Load tester machines connected to the same network
-- (Optional) InfluxDB (or PrometheusDB) + Grafana for gathering and
-  displaying the telemetry from all the nodes.
 
 Number and VM type for the node and load tester machines could be
 changed within the configuration.
 
-## Cleanup
+# Creating AMIs
+
+First you need to create packer images for FDB nodes and tester
+nodes. You can do this:
+```
+$ export AWS_ACCESS_KEY=""
+$ export AWS_SECRET_KEY=""
+$ cd packer-fdb
+$ packer build --only=aws packer.json
+```
+
+Tester AMI can be created exactly like this but you enter
+`packer-tester` folder instead.
+
+
+# Cleanup
 
 This project was started by Rinat Abdullin a while ago as a platform
 for experimenting with FoundationDB. As such it has accumulated some

@@ -1,0 +1,56 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_KEY`}}"
+    },
+    "builders": [
+        {
+            "name": "aws",
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "eu-central-1",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+                    "root-device-type": "ebs"
+                },
+                "owners": ["099720109477"],
+                "most_recent": true
+            },
+            "instance_type": "t2.small",
+            "ssh_username": "ubuntu",
+            "ami_name": "bitgn-fdb",
+            "force_deregister": true,
+            
+            "ami_description": "Ubuntu 16:04 with FoundationDB server",
+            "tags": {
+                "OS_Version" : "Ubuntu",
+                "Release": "16.04",
+                "Component": "fdb"
+            }
+        },
+        {
+            "name": "test",
+            "type": "docker",
+            "image": "ubuntu:16.04",
+            "discard": true
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "upload/",
+            "destination": "/tmp/"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sleep 30",
+                "cd /tmp",
+                "./ubuntu.sh"
+            ]
+        }
+    ]
+}
