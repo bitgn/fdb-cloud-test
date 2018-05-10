@@ -1,0 +1,5 @@
+*.backup
+*.tfstate
+*.plan
+.secret.aws.tfvars
+.terraform
