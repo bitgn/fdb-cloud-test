@@ -183,7 +183,9 @@ resource "aws_instance" "tester" {
       # resolve IP address as host name
       "echo \"${self.private_ip} $(hostname)\" | sudo tee -a /etc/hosts",
       # install default FDB cluster file
-      "echo \"Drtu0T4S:i8uQIB9r@${cidrhost(aws_subnet.db.cidr_block, 101)}:4500\" | sudo tee /etc/foundationdb/fdb.cluster"
+      "echo \"Drtu0T4S:i8uQIB9r@${cidrhost(aws_subnet.db.cidr_block, 101)}:4500\" | sudo tee /etc/foundationdb/fdb.cluster",
+      # print cluster info for the benchmarking purposes
+      "echo \"${var.aws_fdb_size} ${var.aws_fdb_count} ${var.aws_tester_size}\" | sudo tee /etc/cluster"
     ]
   }
 }
