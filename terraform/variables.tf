@@ -21,20 +21,24 @@ variable "aws_region" {
   description = "AWS region to launch servers."
 }
 
+variable "aws_availability_zone" {
+  default = "eu-central-1b"
+}
+
 variable "aws_fdb_size" {
-  default = "t2.medium"
+  default = "m3.large"
   description = "machine type to run FoundationDB servers"
 
 }
 # using only 1 machine will conflict with the default cluster config
 # 'configure new memory double'
 variable "aws_fdb_count" {
-  default = 3
+  default = 5
   description = "how many machines do we want in our cluster. Minimum 2"
 }
 
 variable "aws_tester_size" {
-  default = "m4.xlarge"
+  default = "m3.large"
   description = "instance type for launching tester machines"
 }
 

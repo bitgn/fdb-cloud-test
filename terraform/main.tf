@@ -38,13 +38,13 @@ resource "aws_vpc" "default" {
   cidr_block = "10.0.0.0/16"
   # this will solve sudo: unable to resolve host ip-10-0-xx-xx
   enable_dns_hostnames = true
-
 }
 
 
 # Create an internet gateway to give our subnet access to the outside world
 resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
+
 }
 # Grant the VPC internet access on its main route table
 resource "aws_route" "internet_access" {
@@ -59,6 +59,7 @@ resource "aws_subnet" "client" {
   vpc_id                  = "${aws_vpc.default.id}"
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true
+  availability_zone = "${var.aws_availability_zone}"
 
   tags = {
     Name = "Client Subnet"
@@ -72,6 +73,8 @@ resource "aws_subnet" "db" {
   vpc_id                  = "${aws_vpc.default.id}"
   cidr_block              = "10.0.2.0/24"
   map_public_ip_on_launch = true
+  availability_zone = "${var.aws_availability_zone}"
+
   tags = {
     Name = "FDB Subnet"
     Project = "TF:bitgn"
@@ -154,6 +157,7 @@ resource "aws_instance" "tester" {
 
 
   instance_type = "${var.aws_tester_size}"
+  availability_zone = "${var.aws_availability_zone}"
 
   # Grab AMI id from the data source
   ami = "${data.aws_ami.tester.id}"
@@ -198,7 +202,7 @@ resource "aws_instance" "fdb" {
     # The connection will use the local SSH agent for authentication.
   }
 
-
+  availability_zone = "${var.aws_availability_zone}"
   instance_type = "${var.aws_fdb_size}"
   count = "${var.aws_fdb_count}"
   # Grab AMI id from the data source
@@ -225,25 +229,15 @@ resource "aws_instance" "fdb" {
     Project = "TF:bitgn"
   }
 
+  provisioner "file" {
+    source      = "init.sh"
+    destination = "/tmp/init.sh"
+  }
+
   provisioner "remote-exec" {
     inline = [
-      # stop the service to keep things simple and quiet
-      "sudo service foundationdb stop",
-      # resolve IP address as host name
-      "echo \"${self.private_ip} $(hostname)\" | sudo tee -a /etc/hosts",
-      # wipe the data from the image
-      "sudo rm -rf /var/lib/foundationdb/data/4500/",
-      # make 1st node the coordinator
-      "echo \"Drtu0T4S:i8uQIB9r@${cidrhost(aws_subnet.db.cidr_block, 101)}:4500\" | sudo tee /etc/foundationdb/fdb.cluster",
-      # make sure the cluster file is writeable by everybody
-      "sudo chmod ugo+w /etc/foundationdb/fdb.cluster",
-      # non-seed nodes sleep a bit
-      "${count.index == 0 ? "echo Leader setup" : "sleep 20"}",
-      # restart the FDB service to make things happen. Leader will start first
-      # follower nodes - 20 seconds later
-      "sudo service foundationdb start && sleep 5",
-      # leader will sleep 40 seconds after the nodes (allowing nodes to join) and configure
-      "${count.index == 0 ? "sleep 60 && fdbcli --exec \"configure new memory double; coordinators auto; status\" --timeout 60" : "echo follower"}"
+      "sudo chmod +x /tmp/init.sh",
+      "sudo /tmp/init.sh ${var.aws_fdb_size} ${var.aws_fdb_count} ${self.private_ip} ${cidrhost(aws_subnet.db.cidr_block, 101)}",
     ]
   }
 }

@@ -2,4 +2,4 @@
 *.tfstate
 *.plan
 .secret.aws.tfvars
-.terraform
+.terraform*
