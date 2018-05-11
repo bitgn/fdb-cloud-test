@@ -8,7 +8,7 @@ import (
 
 func benchSimple(db fdb.Database) error {
 
-	write := r.Intn(100) < 20
+	write := r.Intn(100) < *writes
 
 	if write {
 		_, err := db.Transact(func(tr fdb.Transaction) (interface{}, error) {

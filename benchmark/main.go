@@ -10,7 +10,8 @@ import (
 )
 
 var (
-	actors = flag.Int("actors", 100, "number of actors to run")
+	actors = flag.Int("actors", 1000, "number of actors to run")
+	writes = flag.Int("writes", 20, "percent of writes")
 )
 
 func main() {
