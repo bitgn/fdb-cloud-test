@@ -1,1 +1,3 @@
-stats.tsv
+*.tsv
+benchmark-aws
+compile.sh

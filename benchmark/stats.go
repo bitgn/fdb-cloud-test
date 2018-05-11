@@ -24,7 +24,7 @@ func mustOpenFile(name string) *os.File {
 		log.Fatal(err)
 	}
 
-	fmt.Fprintf(f, "# %s %s\n", time.Now().Format("2006-01-02 15:04:05"), os.Args)
+	fmt.Fprintf(f, "# %s args: %s\n", time.Now().Format("2006-01-02 15:04:05"), os.Args[1:])
 	return f
 }
 

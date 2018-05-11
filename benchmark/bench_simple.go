@@ -1,23 +1,10 @@
 package main
 
 import (
-	"math/rand"
-
 	"github.com/apple/foundationdb/bindings/go/src/fdb"
-	"github.com/apple/foundationdb/bindings/go/src/fdb/tuple"
-	"github.com/google/uuid"
 )
 
 // rand seed
-var (
-	r = rand.New(rand.NewSource(42))
-)
-
-func newKey(prefix int) tuple.Tuple {
-	id := uuid.New()
-	buf := [16]byte(id)
-	return tuple.Tuple{BitgnPrefix, prefix, buf[:]}
-}
 
 func benchSimple(db fdb.Database) error {
 
@@ -34,7 +21,6 @@ func benchSimple(db fdb.Database) error {
 	}
 
 	_, err := db.ReadTransact(func(tr fdb.ReadTransaction) (interface{}, error) {
-
 		key := newKey(1)
 		_, err := tr.Get(key).Get()
 		return nil, err
