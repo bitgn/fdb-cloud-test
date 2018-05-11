@@ -185,7 +185,9 @@ resource "aws_instance" "tester" {
       # install default FDB cluster file
       "echo \"Drtu0T4S:i8uQIB9r@${cidrhost(aws_subnet.db.cidr_block, 101)}:4500\" | sudo tee /etc/foundationdb/fdb.cluster",
       # print cluster info for the benchmarking purposes
-      "echo \"${var.aws_fdb_size} ${var.aws_fdb_count} ${var.aws_tester_size}\" | sudo tee /etc/cluster"
+      "echo \"${var.aws_fdb_size} ${var.aws_fdb_count} ${var.aws_tester_size}\" | sudo tee /etc/cluster",
+      # make cluster info readable by anybody
+      "sudo chmod ugo+r /etc/cluster"
     ]
   }
 }
