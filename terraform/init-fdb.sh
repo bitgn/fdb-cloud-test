@@ -7,7 +7,7 @@ SELF_IP=$3
 SEED_IP=$4
 
 
-echo "./init.sh $@"
+echo "./init-fdb.sh $@"
 
 # avoid confusing FoundationDB
 service foundationdb stop

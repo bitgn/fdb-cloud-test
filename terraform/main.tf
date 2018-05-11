@@ -176,18 +176,15 @@ resource "aws_instance" "tester" {
     Project = "TF:bitgn"
   }
 
-
+  provisioner "file" {
+    source      = "init-tester.sh"
+    destination = "/tmp/init-tester.sh"
+  }
 
   provisioner "remote-exec" {
     inline = [
-      # resolve IP address as host name
-      "echo \"${self.private_ip} $(hostname)\" | sudo tee -a /etc/hosts",
-      # install default FDB cluster file
-      "echo \"Drtu0T4S:i8uQIB9r@${cidrhost(aws_subnet.db.cidr_block, 101)}:4500\" | sudo tee /etc/foundationdb/fdb.cluster",
-      # print cluster info for the benchmarking purposes
-      "echo \"${var.aws_fdb_size} ${var.aws_fdb_count} ${var.aws_tester_size}\" | sudo tee /etc/cluster",
-      # make cluster info readable by anybody
-      "sudo chmod ugo+r /etc/cluster"
+      "sudo chmod +x /tmp/init-tester.sh",
+      "sudo /tmp/init-tester.sh ${var.aws_fdb_size} ${var.aws_fdb_count} ${self.private_ip} ${cidrhost(aws_subnet.db.cidr_block, 101)} ${var.aws_tester_size}"
     ]
   }
 }
@@ -234,14 +231,14 @@ resource "aws_instance" "fdb" {
   }
 
   provisioner "file" {
-    source      = "init.sh"
-    destination = "/tmp/init.sh"
+    source      = "init-fdb.sh"
+    destination = "/tmp/init-fdb.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo chmod +x /tmp/init.sh",
-      "sudo /tmp/init.sh ${var.aws_fdb_size} ${var.aws_fdb_count} ${self.private_ip} ${cidrhost(aws_subnet.db.cidr_block, 101)}",
+      "sudo chmod +x /tmp/init-fdb.sh",
+      "sudo /tmp/init-fdb.sh ${var.aws_fdb_size} ${var.aws_fdb_count} ${self.private_ip} ${cidrhost(aws_subnet.db.cidr_block, 101)}",
     ]
   }
 }
