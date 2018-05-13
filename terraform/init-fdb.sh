@@ -43,12 +43,10 @@ esac
 if [ "$SELF_IP" == "$SEED_IP" ]; then
     echo "Seed setup"
     service foundationdb start
-    sleep 45
+    sleep 60
     fdbcli --exec "configure new ssd double; coordinators auto; status" --timeout 60
 else
     echo "Follower setup"
-    # sleep a little
-    sleep 15
     # start the service
     service foundationdb start
 fi

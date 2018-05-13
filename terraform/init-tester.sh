@@ -25,4 +25,4 @@ echo "fdb_count: $FDB_COUNT" >> /etc/cluster
 echo "tester_type: $TESTER_TYPE" >> /etc/cluster
 
 # make cluster info readable by anybody
-chmod ugo+r /etc/cluster.json
+chmod ugo+r /etc/cluster
