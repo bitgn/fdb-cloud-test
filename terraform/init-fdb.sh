@@ -44,7 +44,8 @@ if [ "$SELF_IP" == "$SEED_IP" ]; then
     echo "Seed setup"
     service foundationdb start
     sleep 60
-    fdbcli --exec "configure new ssd double; coordinators auto; status" --timeout 60
+    fdbcli --exec "configure new ssd double" --timeout 60
+    fdbcli --exec "coordinators auto; status" --timeout 60
 else
     echo "Follower setup"
     # start the service

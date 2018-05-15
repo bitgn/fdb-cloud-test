@@ -33,12 +33,12 @@ variable "aws_fdb_size" {
 # using only 1 machine will conflict with the default cluster config
 # 'configure new memory double'
 variable "aws_fdb_count" {
-  default = 5
+  default = 7
   description = "how many machines do we want in our cluster. Minimum 2"
 }
 
 variable "aws_tester_size" {
-  default = "m3.large"
+  default = "c5.2xlarge"
   description = "instance type for launching tester machines"
 }
 
