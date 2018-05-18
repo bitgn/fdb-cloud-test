@@ -25,6 +25,9 @@ echo "Drtu0T4S:i8uQIB9r@$SEED_IP:4500" > /etc/foundationdb/fdb.cluster
 chmod ugo+w /etc/foundationdb/fdb.cluster
 
 
+# NVME disks aren't formatted. Mounting them in fstab - no good
+# mounting NVME disk: https://stackoverflow.com/questions/45167717/mounting-a-nvme-disk-on-aws-ec2
+
 
 case $VM_TYPE in
 "m3.large" | "m3.medium" )
@@ -34,8 +37,13 @@ case $VM_TYPE in
     mkdir -p /var/lib/foundationdb/data
     chown -R foundationdb:foundationdb /var/lib/foundationdb
     ;;
-
-
+"i3.large" )
+    echo SSD optimized
+    mkfs.ext4 -E nodiscard /dev/nvme0n1
+    mount /dev/nvme0n1 /var/lib/foundationdb
+    mkdir -p /var/lib/foundationdb/data
+    chown -R foundationdb:foundationdb /var/lib/foundationdb
+    ;;
 esac
 
 

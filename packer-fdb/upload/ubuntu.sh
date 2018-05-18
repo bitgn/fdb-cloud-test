@@ -16,10 +16,11 @@ fi
 # sources: https://github.com/ripple/docker-fdb-server/blob/master/Dockerfile
 # https://hub.docker.com/r/arypurnomoz/fdb-server/~/dockerfile/
 
+# linux-aws - https://forums.aws.amazon.com/thread.jspa?messageID=769521&tstart=0
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get clean && apt-get update
-apt-get install -y -qq python lsb wget
+apt-get install -y -qq python lsb wget linux-aws
 
 # fix policies (applies to docker)
 mv policy-rc.d /usr/sbin

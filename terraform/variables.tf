@@ -25,8 +25,11 @@ variable "aws_availability_zone" {
   default = "eu-central-1b"
 }
 
+
+// instance store options: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html
+
 variable "aws_fdb_size" {
-  default = "m3.large"
+  default = "i3.large"
   description = "machine type to run FoundationDB servers"
 
 }
