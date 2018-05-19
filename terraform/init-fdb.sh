@@ -5,6 +5,7 @@ VM_TYPE=$1
 VM_COUNT=$2
 SELF_IP=$3
 SEED_IP=$4
+FDB_PROCS=$5
 
 
 echo "./init-fdb.sh $@"
@@ -23,6 +24,15 @@ echo "Drtu0T4S:i8uQIB9r@$SEED_IP:4500" > /etc/foundationdb/fdb.cluster
 
 # make sure the cluster file is writeable by everybody
 chmod ugo+w /etc/foundationdb/fdb.cluster
+
+# we already have 1 process at 4500
+COUNTER=1
+while [  $COUNTER -lt $FDB_PROCS ]; do
+    let "PORT = COUNTER + 4500"
+    echo "PORT $PORT"
+    echo "[fdbserver.$PORT]" >> /etc/foundationdb/foundationdb.conf
+    let COUNTER=COUNTER+1
+done
 
 
 # NVME disks aren't formatted. Mounting them in fstab - no good

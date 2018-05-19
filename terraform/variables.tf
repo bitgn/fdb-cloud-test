@@ -31,15 +31,22 @@ variable "aws_availability_zone" {
 variable "aws_fdb_size" {
   default = "i3.large"
   description = "machine type to run FoundationDB servers"
-
+}
+variable "fdb_procs_per_machine" {
+  default = 2
+  description = "number of FDB processes per machine"
 }
 # using only 1 machine will conflict with the default cluster config
 # 'configure new memory double'
 variable "aws_fdb_count" {
-  default = 7
-  description = "how many machines do we want in our cluster. Minimum 2"
+  default = 12
+  description = "Number of machines in a cluster. Minimum 2"
 }
 
+
+# good options
+# m3.large
+# c5.2xlarge
 variable "aws_tester_size" {
   default = "c5.2xlarge"
   description = "instance type for launching tester machines"

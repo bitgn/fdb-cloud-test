@@ -97,6 +97,15 @@ resource "aws_security_group" "tester_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Mosh UDP ports
+  ingress {
+    from_port   = 60000
+    to_port     = 60010
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
   # outbound internet access
   egress {
     from_port   = 0
@@ -120,10 +129,10 @@ resource "aws_security_group" "fdb_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # FDB access from the VPC
+  # FDB access from the VPC. We open a port for each process
   ingress {
     from_port   = 4500
-    to_port     = 4500
+    to_port     = "${4500 + var.fdb_procs_per_machine - 1}"
     protocol    = "tcp"
     cidr_blocks = ["10.0.0.0/16"]
   }
@@ -238,7 +247,7 @@ resource "aws_instance" "fdb" {
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x /tmp/init-fdb.sh",
-      "sudo /tmp/init-fdb.sh ${var.aws_fdb_size} ${var.aws_fdb_count} ${self.private_ip} ${cidrhost(aws_subnet.db.cidr_block, 101)}",
+      "sudo /tmp/init-fdb.sh ${var.aws_fdb_size} ${var.aws_fdb_count} ${self.private_ip} ${cidrhost(aws_subnet.db.cidr_block, 101)} ${var.fdb_procs_per_machine}",
     ]
   }
 }
