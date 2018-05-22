@@ -20,7 +20,7 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get clean && apt-get update
-apt-get install -y -qq python lsb wget linux-aws mosh
+apt-get install -y -qq python lsb wget linux-aws mosh sysstat
 
 # fix policies (applies to docker)
 mv policy-rc.d /usr/sbin
