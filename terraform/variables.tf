@@ -28,8 +28,12 @@ variable "aws_availability_zone" {
 
 // instance store options: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html
 
+# good options:
+# i3.large - will use local NVMe SSD
+# m3.large - will use local instance store
+
 variable "aws_fdb_size" {
-  default = "i3.large"
+  default = "m3.large"
   description = "machine type to run FoundationDB servers"
 }
 variable "fdb_procs_per_machine" {
@@ -39,7 +43,7 @@ variable "fdb_procs_per_machine" {
 # using only 1 machine will conflict with the default cluster config
 # 'configure new memory double'
 variable "aws_fdb_count" {
-  default = 12
+  default = 3
   description = "Number of machines in a cluster. Minimum 2"
 }
 
@@ -48,7 +52,7 @@ variable "aws_fdb_count" {
 # m3.large
 # c5.2xlarge
 variable "aws_tester_size" {
-  default = "c5.2xlarge"
+  default = "m3.large"
   description = "instance type for launching tester machines"
 }
 
