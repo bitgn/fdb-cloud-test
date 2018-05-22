@@ -27,6 +27,8 @@ plan: prep ## Show what terraform thinks it will do
 
 apply: plan ## Apply the changes
 	@terraform apply "my.plan"
+	@terraform output tester_address > ~/.bitgn_tester
 
 destroy: prep ## Destroy current setup
 	@terraform destroy -var-file="$(VARS)" -lock=false
+	rm ~/.bitgn_tester
