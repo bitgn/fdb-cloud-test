@@ -17,7 +17,7 @@ dpkg-reconfigure tzdata
 
 # need to clean since images could have stale metadata
 apt-get clean && apt-get update
-apt-get -qq -y install build-essential libssl-dev git python curl wget htop mosh screen
+apt-get -qq -y install build-essential libssl-dev git python curl wget htop mosh screen iftop
 
 
 #cleanup
