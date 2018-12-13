@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
-
-# Let's build FDB cluster machine
-
+set -x
 
 # from http://unix.stackexchange.com/a/28793
 # if we aren't root - elevate. This is useful for AMI
@@ -11,6 +9,10 @@ if [ $EUID != 0 ]; then
     exit $?
 fi
 
+export DEBIAN_FRONTEND=noninteractive
+
+# set timezone to UTC
+dpkg-reconfigure tzdata
 
 # https://groups.google.com/forum/#!msg/foundationdb-user/BtJf-1Mlx4I/fxXZClLpnOUJ
 # sources: https://github.com/ripple/docker-fdb-server/blob/master/Dockerfile
@@ -18,31 +20,37 @@ fi
 
 # linux-aws - https://forums.aws.amazon.com/thread.jspa?messageID=769521&tstart=0
 
-export DEBIAN_FRONTEND=noninteractive
+# need to clean since images could have stale metadata
 apt-get clean && apt-get update
-apt-get install -y -qq python lsb wget linux-aws mosh sysstat iftop
+apt-get install -y -qq build-essential python linux-aws sysstat iftop htop iotop ne
 
-# fix policies (applies to docker)
-mv policy-rc.d /usr/sbin
+# install fdbtop
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+apt-get install -y -qq nodejs
+npm install -g fdbtop
+
+######### FDB
 
 cd /tmp
 
-#download the dependencies
-wget https://www.foundationdb.org/downloads/5.1.7/ubuntu/installers/foundationdb-clients_5.1.7-1_amd64.deb
-wget https://www.foundationdb.org/downloads/5.1.7/ubuntu/installers/foundationdb-server_5.1.7-1_amd64.deb
+# download the dependencies
+wget https://www.foundationdb.org/downloads/6.0.15/ubuntu/installers/foundationdb-clients_6.0.15-1_amd64.deb
+wget https://www.foundationdb.org/downloads/6.0.15/ubuntu/installers/foundationdb-server_6.0.15-1_amd64.deb
 
-#server depends on the client packages
-dpkg -i foundationdb-clients_5.1.7-1_amd64.deb
-dpkg -i  foundationdb-server_5.1.7-1_amd64.deb
-
+# server depends on the client packages
+dpkg -i foundationdb-clients_6.0.15-1_amd64.deb foundationdb-server_6.0.15-1_amd64.deb
 # stop the service
 service foundationdb stop
 
-#chown -R foundationdb:foundationdb /etc/foundationdb
+# add default user to foundationdb group
+sudo usermod -a -G foundationdb ubuntu
 
-# stop the service
-service foundationdb stop
+# ensure correct permissions
+chown -R foundationdb:foundationdb /etc/foundationdb
+chmod -R ug+w /etc/foundationdb
 
-# peeked from here
+######### Cleanup
+
+apt-get clean
 rm -rf /var/lib/apt/lists/*
 rm -rf /tmp/*
